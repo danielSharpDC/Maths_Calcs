@@ -99,10 +99,10 @@
 		<input type="text" id="ecran2"/></br></br>
 		
 	<div id="calco" style="float:left;">
-<button class="fonc" id="x2" >x<sup>2</sup></button>
+		<button class="fonc" id="x2" >x<sup>2</sup></button>
 		<button class="fonc" id="xy">x<sup>y</sup></button>
 		<button class="fonc" id="sin">sin</button>
-		 <button class="fonc" onclick="fonctU('asin');" id="asin">sin-1</button>
+		<button class="fonc" onclick="fonctU('asin');" id="asin">sin-1</button>
 		<button class="fonc"  id="cos">cos</button>
 		<button class="fonc"  id="tan">tan</button>
 		</br>
@@ -202,21 +202,15 @@
     
 
 	<script>
+	// récupération des div pour chaque calculatrice (Maths, physique, ...)
 		var calco=document.getElementById("calco"), sphy=document.getElementById("calcoP");
+		// Fonction permettant d'afficher la calculatrice pour physicien
 		function phy(){
 			sphy.style.display="block";
 			calco.style.display="none";
 		}
-		
-		var area=document.querySelector("#area");
-		area.style.overflow="auto";
-		var w=512, h=32;
-		var context=area.getContext("2d");
 
-		btn=document.querySelector("#btn");
-		rel=document.querySelector("#rel");
-
-
+		// Fonction permettant d'afficher le menu
 		function menu(){
 			var nav=document.getElementsByTagName("nav")[0];
 			if(nav.style.display=="block"){
@@ -225,38 +219,54 @@
 				 nav.style.display="block";
 			}
 		}
-		
-		function quadrillage(u){
-			context.lineWidth="0.3";
-			context.beginPath();
-			for(var i=0; i<=w; i++){
-				if(parseInt(i)%u==0){
-					for(var j=0; j<=w; j++){
-						if(parseInt(j)%u==0){
-							context.lineTo(i,j);
-							context.moveTo(i+u,j+u);
+
+		// Code pour la calculatrice graphique
+		// avant-propos :
+		// Nous travaillons dans un repère 2D avec pour origine le coin supérieur gauche de la zone d'affichage
+		// Donc il est important de faire une translation de l'origine vers le centre de la zone
+		// Voir cours de Mathématique du lycéé
+		// Fin avant-propos
+		// récupération des éléments pour le graphique 
+		var area=document.querySelector("#area");
+		area.style.overflow="auto";
+		var w=512, h=32;	// w est la taille du quadrillage et h est 
+		var context=area.getContext("2d");
+
+		btn=document.querySelector("#btn");
+		rel=document.querySelector("#rel");
+		// Fonction permettant d'afficher le quadrillage avec pour paramêtre l'espace entre 2 lignes
+		function quadrillage(u){	// Il s'agit enfaite d'une matrice
+			context.lineWidth="0.3";	// Epaisseur des lignes du quadrillage
+			context.beginPath();	// Commencer le dessin
+			for(var i=0; i<=w; i++){	// boucle pour parcourir horizontalement
+				if(parseInt(i)%u==0){	// si i est est multiple de u alors on trace la li
+					for(var j=0; j<=w; j++){	// boucle pour parcourir verticalement
+						if(parseInt(j)%u==0){	// si j est multiple de u, alors on verouille le point i et 
+							context.lineTo(i,j);	// on trace la ligne verticale puis
+							context.moveTo(i+u,j+u);	// on passe à la ligne suivante à une unité graphique
 						}
 					}	
 				}
 			}
-			context.stroke();
+			context.stroke();	// on a fini le dessin
 		}
-
+		// L'origine du repère
 		function Origine(){
 			this.X=w/2;
 			this.Y=w/2;
 		}
-
+		// class Repere avec pour paramêtre le point d'origine et l'unité graphique
 		function Repere(O,u){
 			this.U=u;
-			this.abscisse=function(){
-				context.lineWidth="1";
-				context.beginPath(); var i=-u,k=-h/8+1;
+			this.abscisse=function(){	// Méthode permettant de créer l'axe des abscisses
+				context.lineWidth="1";	// Largeur de la ligne
+				context.beginPath();	// Dessin de l'axe
+				var i=-u, k=-h/8+1;	// k est le texte affiché dans le repère (Remarque: k=-3)
 				while(i<=w){
 					context.lineTo(i+u,O.Y);
 					if(parseInt(i)%u==0){
-						context.font="10px callibri";
-						context.fillText(k,i+2*u,O.Y+u/4);
+						context.font="10px callibri";	// police des graduations
+						context.fillText(k,i+2*u,O.Y+u/4);	// affichage des nombres dans le repère
 						k++;
 					}
 				i+=1;
@@ -264,7 +274,7 @@
 				context.stroke();
 			};
 
-			this.ordonne=function(){
+			this.ordonne=function(){ // Méthode pour l'axe des ordonnées
 				context.lineWidth="1";
 				var i=-u,k=h/8-1;
 				context.beginPath();
@@ -280,35 +290,34 @@
 				context.stroke();
 			};
 		}
-
+		// Fonction qui retourne l'image d'un nombre par la fonction entrée
 		function f(x){
-			var enter=document.querySelector("#enter").value;
-			var tab=new Array("exp(","cos(","sin(","tan(","atan(","acos(","asin(","cosh(","sinh(","tanh(","acosh(","asinh(","atanh(","log(","sqrt("), t=new Array("+","-","*","/");
+			var enter=document.querySelector("#enter").value; // recupération de la fonction entrée
+			var tab=new Array("exp(","cos(","sin(","tan(","atan(","acos(","asin(","cosh(","sinh(","tanh(","acosh(","asinh(","atanh(","log(","sqrt("), t=new Array("+","-","*","/"); 
 			
 			for(var i=0;i<=tab.length-1;i++){
-				if(enter.indexOf(tab[i])!=-1){
+				if(enter.indexOf(tab[i])!=-1){	// Si la fonction entrée contient une fonction mathématique usuel
 					enter="Math."+enter;
 				}
 			}
-			return eval(enter);
+			return eval(enter);	// on retourne l'évaluation
 		}
 
-
+		// Fonction qui trace le graphe de la fonction
 		function graphe(O,u){
 			i=-w/u;
-			context.strokeStyle="rgba(42,16,140,1)";
-			context.lineWidth="2";
-			context.beginPath(); 
+			context.strokeStyle="rgba(42,16,140,1)";	// Couleur du graphe
+			context.lineWidth="2";	//	Largeur de la ligne du graphe
+			context.beginPath(); 	// On commence le traçage
 			
 			while(i<(w/u)){
-				var a=((-f(i)*u+O.Y));
-				context.lineTo(i*u+O.X,a);
-				i+=0.01;
+				var a=((-f(i)*u+O.Y));	// On calcul l'image pour chaque i puis on multiplie par l'unité graphique et on fais la translation dans le nouveau repère. 
+				context.lineTo(i*u+O.X,a);	// On place le point apartenant au graphe
+				i+=0.01;	// On incrémente i
 			}
 			context.stroke();
 		}
-	
-//exécution.....
+		//exécution.....
 		var O=new Origine(), rep=new Repere(O,64);
 
 		quadrillage(32);
@@ -329,61 +338,66 @@
 
 </script>
 <script>
+	// Recupération des zones d'affichage 
 	var ecran=document.getElementById("ecran");
 	var ecran2=document.getElementById("ecran2");
+	// On recupère tous les boutons
 	var btn=document.getElementsByTagName("button"),
-	tab=new Array(), t=new Array();
-	t[0]=tab[0]="null";
-	var y=0, x=0, s, r, c=0;
-	
-	ecran.value="";
-	ecran2.value="0";
-	
+	tab=new Array(),	// Tableau de ce que l'utilisateur voit
+	t=new Array();	// Tableau des résultats temporaires
+	t[0]=tab[0]="null";	// Initialisation du tableau
+	var y=0, x=0, s, r, c=0;	// Ces variables nous permet de déterminer les fonctions exécutés
+	// On initialise les écrans
+	ecran.value="";	// Ecran supérieur
+	ecran2.value="0";	// Ecran inférieur
+	// Fonction permettant d'afficher un nombre à l'écran
 	function nbr(n){
-	if(y==5){
-		if(x==3){
-			ecran2.value=n+'';
-			y=0;
-			x=0;
-		}else{
-			ecran2.value=n+"";
-			y=0;
-		}
-	}else if(x==3){
-			ecran2.value=n+'';
-			r=parseFloat(n);
-			y=0;
-			x=0;
-	}else{
-			if(ecran2.value=="0"){
-				ecran2.value=n+"";
+		if(y==5){	// S'il y'a eu élévation au carré
+			if(x==3){	// et S'il y'a eu exécution de la fonction puissance
+				ecran2.value=n+'';
+				y=0;
+				x=0;
 			}else{
-				ecran2.value+=n+"";
+				ecran2.value=n+"";
+				y=0;
 			}
-	}
+		}else if(x==3){	// S'il y'a eu exécution de la fonction puissance
+				ecran2.value=n+'';
+				r=parseFloat(n);
+				y=0;
+				x=0;
+		}else{
+				if(ecran2.value=="0"){
+					ecran2.value=n+"";
+				}else{
+					ecran2.value+=n+"";
+				}
+		}
 	 
 	}
 	
 	 function sinus(){
 		fonctU("sin");
 	}
-	
-	 function square(){
+	// Fonction élever au carré
+	function square(){
 	 	var s=parseFloat(ecran2.value); 
 		ecran.value+=s+"^"+2;
 		ecran2.value=s*s;
-		tab.push(s+"^"+2);
-		t.push(ecran2.value); 
-		x=2;
+		tab.push(s+"^"+2);	// On ajoute ce que l'utilisateur voit dans le tableau tab
+		t.push(ecran2.value);	// On ajoute le résultat dans le tableau t
+		x=2;	// Souvenez vous de ça (signifie qu'on a fait appel à une fonction mathématique unaire)
+		document.getElementById("hist").innerHTML+=s+"^"+2+"="+ecran2.value+"</br>";
 	}
-	 function powxy(){
+	// fonction x puissance y
+	function powxy(){
 	 	s=parseFloat(ecran2.value); 
-		ecran.value+=s+"^";
+		ecran.value+=s+"^";	// On ajoute le symbole puissance à l'écran
 		ecran2.value="0";
-		tab.push(s+"^");
-		t.push(ecran2.value); 
-		x=3;
-		c=1;
+		tab.push(s+"^");	// On ajoute ce que l'utilisateur voit dans le tableau
+		t.push(ecran2.value);	// On ajoute 
+		x=3;	// Souvenez vous de ça
+		c=1;	// Souvenez vous de ça
 	}
 	
     function asinus(){
@@ -408,18 +422,18 @@
 	
 	var sin=document.getElementById("sin"),
 	cos=document.getElementById("cos"),
-	 tan=document.getElementById("tan"),
-	 x2=document.getElementById("x2"),
-	 xy=document.getElementById("xy"),
+	tan=document.getElementById("tan"),
+	x2=document.getElementById("x2"),
+	xy=document.getElementById("xy"),
 	asin=document.getElementById("asin");
 	asin.style.display="none"; 	
 	xy.addEventListener("click", powxy, false);
 	x2.addEventListener("click", square, false);
 	sin.addEventListener("click", sinus, false);
-	 cos.addEventListener("click", cosnus, false);
-	 tan.addEventListener("click", tangente, false);
+	cos.addEventListener("click", cosnus, false);
+	tan.addEventListener("click", tangente, false);
 	
-	
+	// Lorsqu'on clique sur seconde fonction
 	function second(){
 		if(btn[11].innerHTML=="↓"){
 			btn[11] .innerHTML="↑";
@@ -430,7 +444,7 @@
 		    tan.innerHTML="tan";
 		    sin.removeEventListener("click", asinus, false);
 		 	sin.addEventListener("click", sinus, false);
-		 	 cos.removeEventListener("click", acosnus, false);
+		 	cos.removeEventListener("click", acosnus, false);
 		 	cos.addEventListener("click", cosnus, false);
 		 	tan.removeEventListener("click", atangente, false);
 		 	tan.addEventListener("click", tangente, false);
@@ -449,12 +463,12 @@
 			 btn[11].style.color="white";
 		}
 	}
-	
+	// Lorsque qu'on desactive seconde fonction
 	function first(){
 		btn[10].innerHTML="↑";
-		btn[10].onclick=second();
+		btn[10].onclick=second;
 	}
-		
+	// Fonction pour les parenthèses
 	function brack(b){
 		if(b=="("){
 			ecran.value+=b+"";
@@ -463,25 +477,25 @@
 			ecran.value+=ecran2.value+b+"";
 			ecran2.value="";
 		}
-	}			
+	}
+	// Fonction effectuant les calculs arithmétiques avec en paramètre l'opérateur			
 	function arith(o){
-		
-		if(ecran.value==''){
+		if(ecran.value==''){	//	Si l'écran supérieur est vide 
 			ecran.value+=ecran2.value+""+o;
 			ecran2.value="0";
 		}else{
 			 var compt=0, res=ecran.value;
 			 for(var j=1; j <=tab.length-1; j++){
-				if(res.indexOf(tab[j])!=-1){
+				if(res.indexOf(tab[j])!=-1){	// Si l'écran supérieur contient des symboles
 					compt+=1;
 				}
 			}
 			if(compt>0){
-				if(x==2){
+				if(x==2){	// Si on viens de faire appel à une fonction mathématique unaire
 					ecran.value+=o;
 					ecran2.value="0";
-					y=5;
-					x=0;
+					y=5;	// Souvenez vous de ça
+					x=0;	// On reintialise x
 					
 				}else{
 					ecran.value+= ecran2.value+o;
@@ -494,20 +508,27 @@
 		}
 	
 	}
+	// Fonction exécuté lors du clique sur le bouton egale
 	function equal(){
-		var res;
+		var res;	// Cette variable doit contenir l'expression à évaluer
 		if(ecran2.value!=""&&ecran2.value!="0"){
 			res=ecran.value;
 			res=res.replace("×", "*");
 			res=res.replace("÷", "/");
 			var compt=0;
 			
-			if(c==1){
+			if(c==1){	// S'il ya le symbole puissance
 				var a=res.indexOf('^'), l=s+'', m=r+'';
 				var f=l.length, g=m.length;
 				var sub=res.substring(a-f, a+g);
 				res=res.replace(sub, eval(Math.pow(s, r)));
-				alert(f+', '+g+', '+res);
+				ecran2.value=res;
+				document.getElementById("hist").innerHTML+=s+"^"+r+"="+res+"</br>";
+				ecran.value="";
+				x=0;
+				c=0;
+				res="";
+				return 0;
 			}
 
 			for(var j=1; j <=tab.length-1; j++){
@@ -528,7 +549,6 @@
 				
 				   res+=ecran2.value+"";
 			}
-//alert(res);
 		}else{
 			res=ecran.value+"0";
 		    res=res.replace("×", "*");
@@ -552,17 +572,21 @@
 			ecran2.value="Error : "+e;
 		}
 	}
+	// Au clique sur le Bouton effacer ecran inférieur
 	btn[12].onclick=function(){
 		ecran2.value="0";
 	};
+	// Au clique sur le Bouton effacer tous les écrans
 	btn[13].onclick=function(){
 		ecran2.value="0";
 		ecran.value="";
 	};
+	// Au clique sur le bouton effacer précédent
 	btn[14].onclick=function(){
 		var cop=ecran2.value;
 		ecran2.value=cop.substring(0, cop.length-1);
 	};
+	// Fonction mathématiques unaire
 	function fonctU(f){
 		var val= f+"("+ecran2.value+")";
 		var fo="Math."+val, temp=ecran.value; 
@@ -570,7 +594,8 @@
 		ecran2.value=eval(fo);
 		tab.push(val);
 		t.push(ecran2.value); 
-		x=2;
+		x=2;	// Souvenez vous de ça (signifie qu'on a fait appel à une fonction mathématique unaire)
+		document.getElementById("hist").innerHTML+=val+"="+ecran2.value+"</br>";
 	}
 </script>
 
