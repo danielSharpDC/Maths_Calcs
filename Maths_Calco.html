@@ -1,0 +1,580 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Math_Calculator</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, width=device-width, user-scalable=yes">
+    <link rel="stylesheet" href="MathTest_styles.css">
+	<style>
+		nav{
+			display:none;
+		    position:absolute; 
+			width:300px;
+			height:100%;
+			box-shadow:10px 20px 30px rgba(100,100,100,0.8);
+			background-image:linear-gradient(to bottom, rgba(42,16,140,1), rgba(52,20,182,1));
+			margin:0 0 0 -10px; 
+		}
+		nav ul {
+			list-style-type:none;
+			margin:0 0 0 -20px;
+		}
+		nav li {
+			display:block; 
+			padding:7px 5px 7px 5px;
+		}
+		nav li:hover{
+			background:rgba(150,150,150,0.4);
+		}
+		nav a {
+			color:rgba(250,250,250,1); 
+			text-decoration:none;
+		}
+		nav a:hover{
+			color:white; 
+		}
+		#ecran{
+			width:300px;
+			border:0px solid black;
+		}
+		#ecran2{
+			width:300px;
+			margin:-2px 0 0 0;
+			border:0px solid black;
+			font-size:1.3em;
+		}
+		.fonc{
+			width:64px;
+			height:32px;
+			border:0px solid black;
+			margin:-2px -5px 0 0;
+			background:#c0c0c0;
+		}
+		.fonc:hover{
+			border:1px solid rgba(42,16,140,1);
+			margin:-2px -5px 0 0;
+			background:rgba(42,16,140,1);
+			color:white;
+		}
+		.chif{
+			background:rgba(230,230,230,0.1);
+			width:64px;
+			height:32px;
+			border:0px solid black;
+			margin:-2px -5px 0 0;
+		}
+		.chif:hover{
+			border:1px solid rgba(42,16,140,1);
+			margin:-2px -5px 0 0;
+			background:rgba(42,16,140,1);
+			color:white;
+		}
+		#imgB{
+			width:11px;
+		}
+		#calco, #hist {
+			display:inline-block;
+			vertical-align:top;
+		}
+		#hist{
+			width:170px;
+			margin:0 0 0 10px;
+			overflow:auto;
+			text-align:right; 
+		}
+	</style>
+  </head>
+  <body>
+   <a href="javascript:menu();" id="vMenu"> Menu </a>
+    <nav>
+    	<ul>
+    		<li><a href="javascript:graph();">Tracer des graphes </a></li>
+    		 <li><a href="javascript:maths();">Calculatrice pour Mathématiques</a></li>
+    		 <li><a href="javascript:info();">Calculatrice pour Informatique</a></li>
+    		 <li><a href="javascript:phy();">Calculatrice pour sciences physiques </a></li>
+    	</ul>
+    </nav>
+    	</br></br>
+    	<input type="text" id="ecran"/></br>
+		<input type="text" id="ecran2"/></br></br>
+		
+	<div id="calco" style="float:left;">
+<button class="fonc" id="x2" >x<sup>2</sup></button>
+		<button class="fonc" id="xy">x<sup>y</sup></button>
+		<button class="fonc" id="sin">sin</button>
+		 <button class="fonc" onclick="fonctU('asin');" id="asin">sin-1</button>
+		<button class="fonc"  id="cos">cos</button>
+		<button class="fonc"  id="tan">tan</button>
+		</br>
+		<button class="fonc" id="sqr" style="padding:10px 0 10px 0;" onclick="fonctU('sqrt');">√</button>
+		<button class="fonc" id="10x">10<sup>x</sup></button>
+		<button class="fonc" onclick="fonctU('log');" id="log">log</button>
+		<button class="fonc" onclick="fonctU('exp');" id="exp">exp</button>
+		<button class="fonc" id="mod">mod</button>
+		</br>
+		<button class="fonc" id="2nd" onclick="second();">↑</button>
+		<button class="fonc" id="clear1">CE</button>
+		<button class="fonc" id="clear">C</button>
+		<button class="fonc" id="back">←</button>
+		<button class="fonc" onclick="arith('÷');" id="div">÷</button>
+		</br>
+		<button class="fonc" id="pi">π</button>
+		<button class="chif" onclick="nbr(7);" id="nbr">7</button>
+		<button class="chif" onclick="nbr(8);" id="nbr">8</button>
+		<button class="chif" onclick="nbr(9);" id="nbr">9</button>
+		<button class="fonc" onclick="arith('×');" id="fois">×</button>
+		</br>
+		<button class="fonc" id="fact">n!</button>
+		<button class="chif" onclick="nbr(4);" id="nbr">4</button>
+		<button class="chif" onclick="nbr(5);" id="nbr">5</button>
+		<button class="chif" onclick="nbr(6);" id="nbr">6</button>
+		<button class="fonc" onclick="arith('-');" id="moins">－</button>
+		</br>
+		<button class="fonc" id="pm">±</button>
+		<button class="chif" onclick="nbr(1);" id="nbr">1</button>
+		<button class="chif" onclick="nbr(2);" id="nbr">2</button>
+		<button class="chif" onclick="nbr(3);" id="nbr">3</button>
+		<button class="fonc" onclick="arith('+');" id="plus">+</button>
+		</br>
+		<button class="fonc" onclick="brack('(');" id="br1">(</button>
+		<button class="fonc" onclick="brack(')');" id="br2">)</button>
+		<button class="chif" onclick="nbr(0);" id="zero">0</button>
+		<button class="fonc" onclick="nbr('.');" id="vir">,</button>
+		<button class="fonc" onclick="equal();"id="equal">=</button>
+		</br>
+	</div>
+	 <div id="calcoP" style="float:left; display:none;">
+     	<button class="fonc" id="e" >e</button>
+		<button class="fonc" id="c">c</button>
+		<button class="fonc" onclick="fonctU('sin');" id="sinus">sin</button>
+		<button class="fonc"  onclick="fonctU('cos');" id="cosus">cos</button>
+		<button class="fonc"  onclick="fonctU('tan');"  id="tang">tan</button>
+		</br>
+		<button class="fonc" id="sqr" style="padding:10px 0 10px 0;">k</button>
+		<button class="fonc" id="10x">G</button>
+		<button class="fonc" id="log">log</button>
+		<button class="fonc" onclick="fonctU('exp');" id="exp">exp</button>
+		<button class="fonc" id="mod">u</button>
+		</br>
+		<button class="fonc" id="2nd" onclick="second();">↑</button>
+		<button class="fonc" id="clear1">CE</button>
+		<button class="fonc" id="clear">C</button>
+		<button class="fonc" id="back">←</button>
+		<button class="fonc" onclick="arith('÷');" id="div">÷</button>
+		</br>
+		<button class="fonc" id="pi">π</button>
+		<button class="chif" onclick="nbr(7);" id="nbr">7</button>
+		<button class="chif" onclick="nbr(8);" id="nbr">8</button>
+		<button class="chif" onclick="nbr(9);" id="nbr">9</button>
+		<button class="fonc" onclick="arith('×');" id="fois">×</button>
+		</br>
+		<button class="fonc" id="fact">n!</button>
+		<button class="chif" onclick="nbr(4);" id="nbr">4</button>
+		<button class="chif" onclick="nbr(5);" id="nbr">5</button>
+		<button class="chif" onclick="nbr(6);" id="nbr">6</button>
+		<button class="fonc" onclick="arith('-');" id="moins">－</button>
+		</br>
+		<button class="fonc" id="pm">±</button>
+		<button class="chif" onclick="nbr(1);" id="nbr">1</button>
+		<button class="chif" onclick="nbr(2);" id="nbr">2</button>
+		<button class="chif" onclick="nbr(3);" id="nbr">3</button>
+		<button class="fonc" onclick="arith('+');" id="plus">+</button>
+		</br>
+		<button class="fonc" onclick="brack('(');" id="br1">(</button>
+		<button class="fonc" onclick="brack(')');" id="br2">)</button>
+		<button class="chif" onclick="nbr(0);" id="zero">0</button>
+		<button class="fonc" onclick="nbr('.');" id="vir">,</button>
+		<button class="fonc" onclick="equal();" id="equal">=</button>
+		</br>
+	</div>
+	<div id="hist">
+	</div>
+	<div id="graph" style="float:right; display:none;">
+    <canvas id="area" width="512" height="512">
+    </canvas>
+    
+    </br>
+	<label>Entrer une fonction mathématique de x:</label></br>
+    f(x)=<input type="text" id="enter" size="15"/>
+    <button id="btn">Tracer</button>
+    <button id="rel">Effacer</button>
+	</div>
+    
+
+	<script>
+		var calco=document.getElementById("calco"), sphy=document.getElementById("calcoP");
+		function phy(){
+			sphy.style.display="block";
+			calco.style.display="none";
+		}
+		
+		var area=document.querySelector("#area");
+		area.style.overflow="auto";
+		var w=512, h=32;
+		var context=area.getContext("2d");
+
+		btn=document.querySelector("#btn");
+		rel=document.querySelector("#rel");
+
+
+		function menu(){
+			var nav=document.getElementsByTagName("nav")[0];
+			if(nav.style.display=="block"){
+				 nav.style.display="none";
+			}else{
+				 nav.style.display="block";
+			}
+		}
+		
+		function quadrillage(u){
+			context.lineWidth="0.3";
+			context.beginPath();
+			for(var i=0; i<=w; i++){
+				if(parseInt(i)%u==0){
+					for(var j=0; j<=w; j++){
+						if(parseInt(j)%u==0){
+							context.lineTo(i,j);
+							context.moveTo(i+u,j+u);
+						}
+					}	
+				}
+			}
+			context.stroke();
+		}
+
+		function Origine(){
+			this.X=w/2;
+			this.Y=w/2;
+		}
+
+		function Repere(O,u){
+			this.U=u;
+			this.abscisse=function(){
+				context.lineWidth="1";
+				context.beginPath(); var i=-u,k=-h/8+1;
+				while(i<=w){
+					context.lineTo(i+u,O.Y);
+					if(parseInt(i)%u==0){
+						context.font="10px callibri";
+						context.fillText(k,i+2*u,O.Y+u/4);
+						k++;
+					}
+				i+=1;
+				}
+				context.stroke();
+			};
+
+			this.ordonne=function(){
+				context.lineWidth="1";
+				var i=-u,k=h/8-1;
+				context.beginPath();
+				while(i<=w){
+					context.lineTo(O.X,i+u);
+					if(parseInt(i)%u==0){
+						context.font="10px callibri";
+						context.fillText(k,O.X-u/4,i+2*u);
+						k--;
+					}
+					i+=1;
+				}
+				context.stroke();
+			};
+		}
+
+		function f(x){
+			var enter=document.querySelector("#enter").value;
+			var tab=new Array("exp(","cos(","sin(","tan(","atan(","acos(","asin(","cosh(","sinh(","tanh(","acosh(","asinh(","atanh(","log(","sqrt("), t=new Array("+","-","*","/");
+			
+			for(var i=0;i<=tab.length-1;i++){
+				if(enter.indexOf(tab[i])!=-1){
+					enter="Math."+enter;
+				}
+			}
+			return eval(enter);
+		}
+
+
+		function graphe(O,u){
+			i=-w/u;
+			context.strokeStyle="rgba(42,16,140,1)";
+			context.lineWidth="2";
+			context.beginPath(); 
+			
+			while(i<(w/u)){
+				var a=((-f(i)*u+O.Y));
+				context.lineTo(i*u+O.X,a);
+				i+=0.01;
+			}
+			context.stroke();
+		}
+	
+//exécution.....
+		var O=new Origine(), rep=new Repere(O,64);
+
+		quadrillage(32);
+		rep.abscisse();
+		rep.ordonne();
+
+		btn.onclick=function (){
+			graphe(O,64);
+		};
+		rel.onclick=function(){
+			context.clearRect(0,0,w,w);
+			context.lineWidth="1";
+			context.strokeStyle="rgba(0,0,0,1)";
+			quadrillage(32);
+			rep.abscisse();
+			rep.ordonne();
+		};
+
+</script>
+<script>
+	var ecran=document.getElementById("ecran");
+	var ecran2=document.getElementById("ecran2");
+	var btn=document.getElementsByTagName("button"),
+	tab=new Array(), t=new Array();
+	t[0]=tab[0]="null";
+	var y=0, x=0, s, r, c=0;
+	
+	ecran.value="";
+	ecran2.value="0";
+	
+	function nbr(n){
+	if(y==5){
+		if(x==3){
+			ecran2.value=n+'';
+			y=0;
+			x=0;
+		}else{
+			ecran2.value=n+"";
+			y=0;
+		}
+	}else if(x==3){
+			ecran2.value=n+'';
+			r=parseFloat(n);
+			y=0;
+			x=0;
+	}else{
+			if(ecran2.value=="0"){
+				ecran2.value=n+"";
+			}else{
+				ecran2.value+=n+"";
+			}
+	}
+	 
+	}
+	
+	 function sinus(){
+		fonctU("sin");
+	}
+	
+	 function square(){
+	 	var s=parseFloat(ecran2.value); 
+		ecran.value+=s+"^"+2;
+		ecran2.value=s*s;
+		tab.push(s+"^"+2);
+		t.push(ecran2.value); 
+		x=2;
+	}
+	 function powxy(){
+	 	s=parseFloat(ecran2.value); 
+		ecran.value+=s+"^";
+		ecran2.value="0";
+		tab.push(s+"^");
+		t.push(ecran2.value); 
+		x=3;
+		c=1;
+	}
+	
+    function asinus(){
+		fonctU("asin");
+	}
+	 function cosnus(){
+		fonctU("cos");
+	}
+	
+    function acosnus(){
+		fonctU("acos");
+	}
+	
+	 function tangente(){
+		fonctU("tan");
+	}
+	
+    function atangente(){
+		fonctU("atan");
+	}
+	
+	
+	var sin=document.getElementById("sin"),
+	cos=document.getElementById("cos"),
+	 tan=document.getElementById("tan"),
+	 x2=document.getElementById("x2"),
+	 xy=document.getElementById("xy"),
+	asin=document.getElementById("asin");
+	asin.style.display="none"; 	
+	xy.addEventListener("click", powxy, false);
+	x2.addEventListener("click", square, false);
+	sin.addEventListener("click", sinus, false);
+	 cos.addEventListener("click", cosnus, false);
+	 tan.addEventListener("click", tangente, false);
+	
+	
+	function second(){
+		if(btn[11].innerHTML=="↓"){
+			btn[11] .innerHTML="↑";
+		    btn[11].style.background="#c0c0c0";
+			btn[11] .style.color="black";
+		    sin.innerHTML="sin";
+		    cos.innerHTML="cos";
+		    tan.innerHTML="tan";
+		    sin.removeEventListener("click", asinus, false);
+		 	sin.addEventListener("click", sinus, false);
+		 	 cos.removeEventListener("click", acosnus, false);
+		 	cos.addEventListener("click", cosnus, false);
+		 	tan.removeEventListener("click", atangente, false);
+		 	tan.addEventListener("click", tangente, false);
+		}else{
+			btn[11].innerHTML="↓";
+			sin.innerHTML="sin-1";
+			cos.innerHTML="cos-1";
+		    tan.innerHTML="tan-1";
+			sin.removeEventListener("click", sinus, false);
+		 	sin.addEventListener("click", asinus, false); 	
+		 	cos.removeEventListener("click", cosnus, false);
+		 	cos.addEventListener("click", acosnus, false);
+		 	tan.removeEventListener("click", tangente, false);
+		 	tan.addEventListener("click", atangente, false);
+			 btn[11].style.background="rgba(42,16,140,1)";
+			 btn[11].style.color="white";
+		}
+	}
+	
+	function first(){
+		btn[10].innerHTML="↑";
+		btn[10].onclick=second();
+	}
+		
+	function brack(b){
+		if(b=="("){
+			ecran.value+=b+"";
+			ecran2.value="0";
+		}else{			
+			ecran.value+=ecran2.value+b+"";
+			ecran2.value="";
+		}
+	}			
+	function arith(o){
+		
+		if(ecran.value==''){
+			ecran.value+=ecran2.value+""+o;
+			ecran2.value="0";
+		}else{
+			 var compt=0, res=ecran.value;
+			 for(var j=1; j <=tab.length-1; j++){
+				if(res.indexOf(tab[j])!=-1){
+					compt+=1;
+				}
+			}
+			if(compt>0){
+				if(x==2){
+					ecran.value+=o;
+					ecran2.value="0";
+					y=5;
+					x=0;
+					
+				}else{
+					ecran.value+= ecran2.value+o;
+					ecran2.value="0";
+				}
+			}else{
+				ecran.value+=ecran2.value+o;
+				ecran2.value="0";
+			}
+		}
+	
+	}
+	function equal(){
+		var res;
+		if(ecran2.value!=""&&ecran2.value!="0"){
+			res=ecran.value;
+			res=res.replace("×", "*");
+			res=res.replace("÷", "/");
+			var compt=0;
+			
+			if(c==1){
+				var a=res.indexOf('^'), l=s+'', m=r+'';
+				var f=l.length, g=m.length;
+				var sub=res.substring(a-f, a+g);
+				res=res.replace(sub, eval(Math.pow(s, r)));
+				alert(f+', '+g+', '+res);
+			}
+
+			for(var j=1; j <=tab.length-1; j++){
+				if(res.indexOf(tab[j])!=-1){
+					compt+=1;
+				}
+			}
+
+			if(compt>0){
+				for(var i=1; i <=tab.length-1; i++){
+					res=res.replace(tab[i], t[i]);
+				}
+				if(x<2){
+					 res+=ecran2.value+"";
+					 y=0;
+				}
+			}else{
+				
+				   res+=ecran2.value+"";
+			}
+//alert(res);
+		}else{
+			res=ecran.value+"0";
+		    res=res.replace("×", "*");
+			res=res.replace("÷", "/");
+			for(var i=1; i<=tab.length-1; i++){
+				res=res.replace(tab[i], t[i]);
+			}
+		}
+		try{
+			ecran2.value=eval(res)+"";
+			ecran.value="";
+			res=res.replace("*", "×");
+			res=res.replace("/", "÷");
+			 for(var i= tab.length-1; i>=1; i--){
+				res=res.replace(t[i], tab[i]);
+			}
+			document.getElementById("hist").innerHTML+=res+"="+ecran2.value+"</br>";
+			tab.splice(1, tab.length-1);
+		    t.splice(1, t.length-1);
+		}catch(e){
+			ecran2.value="Error : "+e;
+		}
+	}
+	btn[12].onclick=function(){
+		ecran2.value="0";
+	};
+	btn[13].onclick=function(){
+		ecran2.value="0";
+		ecran.value="";
+	};
+	btn[14].onclick=function(){
+		var cop=ecran2.value;
+		ecran2.value=cop.substring(0, cop.length-1);
+	};
+	function fonctU(f){
+		var val= f+"("+ecran2.value+")";
+		var fo="Math."+val, temp=ecran.value; 
+		ecran.value+=val;
+		ecran2.value=eval(fo);
+		tab.push(val);
+		t.push(ecran2.value); 
+		x=2;
+	}
+</script>
+
+  </body>
+</html>
+
+<!--─ #DC Corporation - 2018 by Zeroloader-->
