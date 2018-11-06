@@ -1,0 +1,103 @@
+#calcBody{
+	border: 1px solid rgba(42,16,140,1);
+	width: 500px;
+	height: 360px;
+}
+#title{
+	width: 99%;
+	height: 30px;
+	background: rgba(52,20,182,1);
+	color: white;
+	padding: 10px 0 0 5px;
+	margin: -0.1px 0 0 0;
+}
+#title a{
+	color: white;
+}
+#nameCalc{
+	margin: 0 0 0 10px;
+	font-family: Arial, sans serif;
+	font-size: 1.1em;
+	color: rgba(255,255,255, 0.8);
+}
+#navCalco{
+    position:absolute; 
+	width:0px;
+	height:320px;
+	box-shadow:10px 20px 30px rgba(100,100,100,0.8);
+	background-image:linear-gradient(to bottom, rgba(42,16,140,1), rgba(52,20,182,1));
+	transition:0.2s;
+	transition-property:all;
+	overflow: hidden; 
+}
+#navCalco ul {
+	list-style-type:none;
+	margin:0 0 0 -20px;
+}
+#navCalco li {
+	display:block; 
+	padding:7px 5px 7px 5px;
+	margin: 0 0 0 -20px;
+}
+#navCalco li:hover{
+	background:rgba(150,150,150,0.2);
+}
+#navCalco a {
+	color:rgba(250,250,250,1); 
+	text-decoration:none;
+}
+#navCalco a:hover{
+	color:white; 
+}
+#ecran{
+	width:300px;
+	border:0px solid black;
+}
+#ecran2{
+	width:300px;
+	margin:-2px 0 0 0;
+	border:0px solid black;
+	font-size:1.3em;
+}
+.fonc{
+	width:64px;
+	height:32px;
+	border:0px solid black;
+	margin:-2px -5px 0 0;
+	background:#c0c0c0;
+}
+.fonc:hover{
+	border:1px solid rgba(42,16,140,1);
+	margin:-2px -5px 0 0;
+	background:rgba(42,16,140,1);
+	color:white;
+}
+.chif{
+	background:rgba(230,230,230,0.1);
+	width:64px;
+	height:32px;
+	border:0px solid black;
+	margin:-2px -5px 0 0;
+}
+.chif:hover{
+	border:1px solid rgba(42,16,140,1);
+	margin:-2px -5px 0 0;
+	background:rgba(42,16,140,1);
+	color:white;
+}
+#imgB{
+	width:11px;
+}
+#calco, #histoire {
+	display:inline-block;
+	vertical-align:top;
+}
+#histoire{
+	width:170px;
+	margin:-50px 0 0 10px;
+	text-align:right; 
+}
+#hist{
+	width: 100%;
+	overflow:auto;
+}

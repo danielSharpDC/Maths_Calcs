@@ -4,94 +4,17 @@
     <title>Math_Calculator</title>
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, width=device-width, user-scalable=yes">
-    <link rel="stylesheet" href="MathTest_styles.css">
-	<style>
-		nav{
-			display:none;
-		    position:absolute; 
-			width:300px;
-			height:100%;
-			box-shadow:10px 20px 30px rgba(100,100,100,0.8);
-			background-image:linear-gradient(to bottom, rgba(42,16,140,1), rgba(52,20,182,1));
-			margin:0 0 0 -10px; 
-		}
-		nav ul {
-			list-style-type:none;
-			margin:0 0 0 -20px;
-		}
-		nav li {
-			display:block; 
-			padding:7px 5px 7px 5px;
-		}
-		nav li:hover{
-			background:rgba(150,150,150,0.4);
-		}
-		nav a {
-			color:rgba(250,250,250,1); 
-			text-decoration:none;
-		}
-		nav a:hover{
-			color:white; 
-		}
-		#ecran{
-			width:300px;
-			border:0px solid black;
-		}
-		#ecran2{
-			width:300px;
-			margin:-2px 0 0 0;
-			border:0px solid black;
-			font-size:1.3em;
-		}
-		.fonc{
-			width:64px;
-			height:32px;
-			border:0px solid black;
-			margin:-2px -5px 0 0;
-			background:#c0c0c0;
-		}
-		.fonc:hover{
-			border:1px solid rgba(42,16,140,1);
-			margin:-2px -5px 0 0;
-			background:rgba(42,16,140,1);
-			color:white;
-		}
-		.chif{
-			background:rgba(230,230,230,0.1);
-			width:64px;
-			height:32px;
-			border:0px solid black;
-			margin:-2px -5px 0 0;
-		}
-		.chif:hover{
-			border:1px solid rgba(42,16,140,1);
-			margin:-2px -5px 0 0;
-			background:rgba(42,16,140,1);
-			color:white;
-		}
-		#imgB{
-			width:11px;
-		}
-		#calco, #hist {
-			display:inline-block;
-			vertical-align:top;
-		}
-		#hist{
-			width:170px;
-			margin:0 0 0 10px;
-			overflow:auto;
-			text-align:right; 
-		}
-	</style>
+    <link rel="stylesheet" href="style_calco.css">
   </head>
   <body>
-   <a href="javascript:menu();" id="vMenu"> Menu </a>
-    <nav>
+  <div id="calcBody">
+   <p id="title"><a href="javascript:menu();" id="vMenu"> Menu </a> <font id="nameCalc"></font></p>
+    <nav id="navCalco">
     	<ul>
-    		<li><a href="javascript:graph();">Tracer des graphes </a></li>
-    		 <li><a href="javascript:maths();">Calculatrice pour Mathématiques</a></li>
-    		 <li><a href="javascript:info();">Calculatrice pour Informatique</a></li>
-    		 <li><a href="javascript:phy();">Calculatrice pour sciences physiques </a></li>
+    		 <li id="calcLi"><a href="javascript:;" onclick="switchCalc('Graphic');">Tracer des graphes </a></li>
+    		 <li id="calcLi"><a href="javascript:;" onclick="switchCalc('Maths');">Calculatrice pour Mathématiques</a></li>
+    		 <li id="calcLi"><a href="javascript:;" onclick="switchCalc('Programs');">Calculatrice pour Informatique</a></li>
+    		 <li id="calcLi"><a href="javascript:;" onclick="switchCalc('Physics');">Calculatrice pour sciences physiques </a></li>
     	</ul>
     </nav>
     	</br></br>
@@ -187,7 +110,10 @@
 		<button class="fonc" onclick="equal();" id="equal">=</button>
 		</br>
 	</div>
-	<div id="hist">
+	<div id="histoire">
+		<p>Historique</p>
+		<div id="hist">
+		</div>
 	</div>
 	<div id="graph" style="float:right; display:none;">
     <canvas id="area" width="512" height="512">
@@ -200,405 +126,80 @@
     <button id="rel">Effacer</button>
 	</div>
     
-
+	<script type="text/javascript" src="graphique.js"></script>
 	<script>
 	// récupération des div pour chaque calculatrice (Maths, physique, ...)
 		var calco=document.getElementById("calco"), sphy=document.getElementById("calcoP");
-		// Fonction permettant d'afficher la calculatrice pour physicien
-		function phy(){
-			sphy.style.display="block";
-			calco.style.display="none";
+		// Fonction permettant de switcher la calculatrice
+		var nameCalc=document.querySelector("#nameCalc"),
+		navCalcLi=document.querySelectorAll("#calcLi");
+		nameCalc.innerHTML="Mathématicien";
+		navCalcLi[1].style.background="rgba(150,150,150,0.4)";
+		function switchCalc(type){
+			switch(type){
+				case 'Maths':
+					nameCalc.innerHTML="Mathématicien";
+					navCalcLi[1].style.background="rgba(150,150,150,0.4)";
+					//Desactivation des autres éléments
+					for(var i=0; i<navCalcLi.length; i++){
+						if(i!=1){
+							navCalcLi[i].style.background="rgba(150,150,150,0)";
+						}
+					}
+					menu();
+				break;
+				case 'Physics':
+					nameCalc.innerHTML="Physicien";
+					navCalcLi[3].style.background="rgba(150,150,150,0.4)";
+					for(var i=0; i<navCalcLi.length; i++){
+						if(i!=3){
+							navCalcLi[i].style.background="rgba(150,150,150,0)";
+						}
+					}
+					menu();
+				break;
+				case 'Programs':
+					nameCalc.innerHTML="Informaticien";
+					navCalcLi[2].style.background="rgba(150,150,150,0.4)";
+					for(var i=0; i<navCalcLi.length; i++){
+						if(i!=2){
+							navCalcLi[i].style.background="rgba(150,150,150,0)";
+						}
+					}
+					menu();
+				break;
+				case 'Graphic':
+					nameCalc.innerHTML="Graphique";
+					navCalcLi[0].style.background="rgba(150,150,150,0.4)";
+					for(var i=0; i<navCalcLi.length; i++){
+						if(i!=0){
+							navCalcLi[i].style.background="rgba(150,150,150,0)";
+						}
+					}
+					menu();
+				break;
+			}
 		}
 
 		// Fonction permettant d'afficher le menu
+		var navX=0;
 		function menu(){
 			var nav=document.getElementsByTagName("nav")[0];
-			if(nav.style.display=="block"){
-				 nav.style.display="none";
+			if(navX==0){
+				 nav.style.width="300px";
+				 navX++;
 			}else{
-				 nav.style.display="block";
+				 nav.style.width="0px";
+				 navX=0;
 			}
 		}
 
-		// Code pour la calculatrice graphique
-		// avant-propos :
-		// Nous travaillons dans un repère 2D avec pour origine le coin supérieur gauche de la zone d'affichage
-		// Donc il est important de faire une translation de l'origine vers le centre de la zone
-		// Voir cours de Mathématique du lycéé
-		// Fin avant-propos
-		// récupération des éléments pour le graphique 
-		var area=document.querySelector("#area");
-		area.style.overflow="auto";
-		var w=512, h=32;	// w est la taille du quadrillage et h est 
-		var context=area.getContext("2d");
-
-		btn=document.querySelector("#btn");
-		rel=document.querySelector("#rel");
-		// Fonction permettant d'afficher le quadrillage avec pour paramêtre l'espace entre 2 lignes
-		function quadrillage(u){	// Il s'agit enfaite d'une matrice
-			context.lineWidth="0.3";	// Epaisseur des lignes du quadrillage
-			context.beginPath();	// Commencer le dessin
-			for(var i=0; i<=w; i++){	// boucle pour parcourir horizontalement
-				if(parseInt(i)%u==0){	// si i est est multiple de u alors on trace la li
-					for(var j=0; j<=w; j++){	// boucle pour parcourir verticalement
-						if(parseInt(j)%u==0){	// si j est multiple de u, alors on verouille le point i et 
-							context.lineTo(i,j);	// on trace la ligne verticale puis
-							context.moveTo(i+u,j+u);	// on passe à la ligne suivante à une unité graphique
-						}
-					}	
-				}
-			}
-			context.stroke();	// on a fini le dessin
-		}
-		// L'origine du repère
-		function Origine(){
-			this.X=w/2;
-			this.Y=w/2;
-		}
-		// class Repere avec pour paramêtre le point d'origine et l'unité graphique
-		function Repere(O,u){
-			this.U=u;
-			this.abscisse=function(){	// Méthode permettant de créer l'axe des abscisses
-				context.lineWidth="1";	// Largeur de la ligne
-				context.beginPath();	// Dessin de l'axe
-				var i=-u, k=-h/8+1;	// k est le texte affiché dans le repère (Remarque: k=-3)
-				while(i<=w){
-					context.lineTo(i+u,O.Y);
-					if(parseInt(i)%u==0){
-						context.font="10px callibri";	// police des graduations
-						context.fillText(k,i+2*u,O.Y+u/4);	// affichage des nombres dans le repère
-						k++;
-					}
-				i+=1;
-				}
-				context.stroke();
-			};
-
-			this.ordonne=function(){ // Méthode pour l'axe des ordonnées
-				context.lineWidth="1";
-				var i=-u,k=h/8-1;
-				context.beginPath();
-				while(i<=w){
-					context.lineTo(O.X,i+u);
-					if(parseInt(i)%u==0){
-						context.font="10px callibri";
-						context.fillText(k,O.X-u/4,i+2*u);
-						k--;
-					}
-					i+=1;
-				}
-				context.stroke();
-			};
-		}
-		// Fonction qui retourne l'image d'un nombre par la fonction entrée
-		function f(x){
-			var enter=document.querySelector("#enter").value; // recupération de la fonction entrée
-			var tab=new Array("exp(","cos(","sin(","tan(","atan(","acos(","asin(","cosh(","sinh(","tanh(","acosh(","asinh(","atanh(","log(","sqrt("), t=new Array("+","-","*","/"); 
-			
-			for(var i=0;i<=tab.length-1;i++){
-				if(enter.indexOf(tab[i])!=-1){	// Si la fonction entrée contient une fonction mathématique usuel
-					enter="Math."+enter;
-				}
-			}
-			return eval(enter);	// on retourne l'évaluation
-		}
-
-		// Fonction qui trace le graphe de la fonction
-		function graphe(O,u){
-			i=-w/u;
-			context.strokeStyle="rgba(42,16,140,1)";	// Couleur du graphe
-			context.lineWidth="2";	//	Largeur de la ligne du graphe
-			context.beginPath(); 	// On commence le traçage
-			
-			while(i<(w/u)){
-				var a=((-f(i)*u+O.Y));	// On calcul l'image pour chaque i puis on multiplie par l'unité graphique et on fais la translation dans le nouveau repère. 
-				context.lineTo(i*u+O.X,a);	// On place le point apartenant au graphe
-				i+=0.01;	// On incrémente i
-			}
-			context.stroke();
-		}
-		//exécution.....
-		var O=new Origine(), rep=new Repere(O,64);
-
-		quadrillage(32);
-		rep.abscisse();
-		rep.ordonne();
-
-		btn.onclick=function (){
-			graphe(O,64);
-		};
-		rel.onclick=function(){
-			context.clearRect(0,0,w,w);
-			context.lineWidth="1";
-			context.strokeStyle="rgba(0,0,0,1)";
-			quadrillage(32);
-			rep.abscisse();
-			rep.ordonne();
-		};
-
+		
 </script>
-<script>
-	// Recupération des zones d'affichage 
-	var ecran=document.getElementById("ecran");
-	var ecran2=document.getElementById("ecran2");
-	// On recupère tous les boutons
-	var btn=document.getElementsByTagName("button"),
-	tab=new Array(),	// Tableau de ce que l'utilisateur voit
-	t=new Array();	// Tableau des résultats temporaires
-	t[0]=tab[0]="null";	// Initialisation du tableau
-	var y=0, x=0, s, r, c=0;	// Ces variables nous permet de déterminer les fonctions exécutés
-	// On initialise les écrans
-	ecran.value="";	// Ecran supérieur
-	ecran2.value="0";	// Ecran inférieur
-	// Fonction permettant d'afficher un nombre à l'écran
-	function nbr(n){
-		if(y==5){	// S'il y'a eu élévation au carré
-			if(x==3){	// et S'il y'a eu exécution de la fonction puissance
-				ecran2.value=n+'';
-				y=0;
-				x=0;
-			}else{
-				ecran2.value=n+"";
-				y=0;
-			}
-		}else if(x==3){	// S'il y'a eu exécution de la fonction puissance
-				ecran2.value=n+'';
-				r=parseFloat(n);
-				y=0;
-				x=0;
-		}else{
-				if(ecran2.value=="0"){
-					ecran2.value=n+"";
-				}else{
-					ecran2.value+=n+"";
-				}
-		}
-	 
-	}
-	
-	 function sinus(){
-		fonctU("sin");
-	}
-	// Fonction élever au carré
-	function square(){
-	 	var s=parseFloat(ecran2.value); 
-		ecran.value+=s+"^"+2;
-		ecran2.value=s*s;
-		tab.push(s+"^"+2);	// On ajoute ce que l'utilisateur voit dans le tableau tab
-		t.push(ecran2.value);	// On ajoute le résultat dans le tableau t
-		x=2;	// Souvenez vous de ça (signifie qu'on a fait appel à une fonction mathématique unaire)
-		document.getElementById("hist").innerHTML+=s+"^"+2+"="+ecran2.value+"</br>";
-	}
-	// fonction x puissance y
-	function powxy(){
-	 	s=parseFloat(ecran2.value); 
-		ecran.value+=s+"^";	// On ajoute le symbole puissance à l'écran
-		ecran2.value="0";
-		tab.push(s+"^");	// On ajoute ce que l'utilisateur voit dans le tableau
-		t.push(ecran2.value);	// On ajoute 
-		x=3;	// Souvenez vous de ça
-		c=1;	// Souvenez vous de ça
-	}
-	
-    function asinus(){
-		fonctU("asin");
-	}
-	 function cosnus(){
-		fonctU("cos");
-	}
-	
-    function acosnus(){
-		fonctU("acos");
-	}
-	
-	 function tangente(){
-		fonctU("tan");
-	}
-	
-    function atangente(){
-		fonctU("atan");
-	}
-	
-	
-	var sin=document.getElementById("sin"),
-	cos=document.getElementById("cos"),
-	tan=document.getElementById("tan"),
-	x2=document.getElementById("x2"),
-	xy=document.getElementById("xy"),
-	asin=document.getElementById("asin");
-	asin.style.display="none"; 	
-	xy.addEventListener("click", powxy, false);
-	x2.addEventListener("click", square, false);
-	sin.addEventListener("click", sinus, false);
-	cos.addEventListener("click", cosnus, false);
-	tan.addEventListener("click", tangente, false);
-	
-	// Lorsqu'on clique sur seconde fonction
-	function second(){
-		if(btn[11].innerHTML=="↓"){
-			btn[11] .innerHTML="↑";
-		    btn[11].style.background="#c0c0c0";
-			btn[11] .style.color="black";
-		    sin.innerHTML="sin";
-		    cos.innerHTML="cos";
-		    tan.innerHTML="tan";
-		    sin.removeEventListener("click", asinus, false);
-		 	sin.addEventListener("click", sinus, false);
-		 	cos.removeEventListener("click", acosnus, false);
-		 	cos.addEventListener("click", cosnus, false);
-		 	tan.removeEventListener("click", atangente, false);
-		 	tan.addEventListener("click", tangente, false);
-		}else{
-			btn[11].innerHTML="↓";
-			sin.innerHTML="sin-1";
-			cos.innerHTML="cos-1";
-		    tan.innerHTML="tan-1";
-			sin.removeEventListener("click", sinus, false);
-		 	sin.addEventListener("click", asinus, false); 	
-		 	cos.removeEventListener("click", cosnus, false);
-		 	cos.addEventListener("click", acosnus, false);
-		 	tan.removeEventListener("click", tangente, false);
-		 	tan.addEventListener("click", atangente, false);
-			 btn[11].style.background="rgba(42,16,140,1)";
-			 btn[11].style.color="white";
-		}
-	}
-	// Lorsque qu'on desactive seconde fonction
-	function first(){
-		btn[10].innerHTML="↑";
-		btn[10].onclick=second;
-	}
-	// Fonction pour les parenthèses
-	function brack(b){
-		if(b=="("){
-			ecran.value+=b+"";
-			ecran2.value="0";
-		}else{			
-			ecran.value+=ecran2.value+b+"";
-			ecran2.value="";
-		}
-	}
-	// Fonction effectuant les calculs arithmétiques avec en paramètre l'opérateur			
-	function arith(o){
-		if(ecran.value==''){	//	Si l'écran supérieur est vide 
-			ecran.value+=ecran2.value+""+o;
-			ecran2.value="0";
-		}else{
-			 var compt=0, res=ecran.value;
-			 for(var j=1; j <=tab.length-1; j++){
-				if(res.indexOf(tab[j])!=-1){	// Si l'écran supérieur contient des symboles
-					compt+=1;
-				}
-			}
-			if(compt>0){
-				if(x==2){	// Si on viens de faire appel à une fonction mathématique unaire
-					ecran.value+=o;
-					ecran2.value="0";
-					y=5;	// Souvenez vous de ça
-					x=0;	// On reintialise x
-					
-				}else{
-					ecran.value+= ecran2.value+o;
-					ecran2.value="0";
-				}
-			}else{
-				ecran.value+=ecran2.value+o;
-				ecran2.value="0";
-			}
-		}
-	
-	}
-	// Fonction exécuté lors du clique sur le bouton egale
-	function equal(){
-		var res;	// Cette variable doit contenir l'expression à évaluer
-		if(ecran2.value!=""&&ecran2.value!="0"){
-			res=ecran.value;
-			res=res.replace("×", "*");
-			res=res.replace("÷", "/");
-			var compt=0;
-			
-			if(c==1){	// S'il ya le symbole puissance
-				var a=res.indexOf('^'), l=s+'', m=r+'';
-				var f=l.length, g=m.length;
-				var sub=res.substring(a-f, a+g);
-				res=res.replace(sub, eval(Math.pow(s, r)));
-				ecran2.value=res;
-				document.getElementById("hist").innerHTML+=s+"^"+r+"="+res+"</br>";
-				ecran.value="";
-				x=0;
-				c=0;
-				res="";
-				return 0;
-			}
-
-			for(var j=1; j <=tab.length-1; j++){
-				if(res.indexOf(tab[j])!=-1){
-					compt+=1;
-				}
-			}
-
-			if(compt>0){
-				for(var i=1; i <=tab.length-1; i++){
-					res=res.replace(tab[i], t[i]);
-				}
-				if(x<2){
-					 res+=ecran2.value+"";
-					 y=0;
-				}
-			}else{
-				
-				   res+=ecran2.value+"";
-			}
-		}else{
-			res=ecran.value+"0";
-		    res=res.replace("×", "*");
-			res=res.replace("÷", "/");
-			for(var i=1; i<=tab.length-1; i++){
-				res=res.replace(tab[i], t[i]);
-			}
-		}
-		try{
-			ecran2.value=eval(res)+"";
-			ecran.value="";
-			res=res.replace("*", "×");
-			res=res.replace("/", "÷");
-			 for(var i= tab.length-1; i>=1; i--){
-				res=res.replace(t[i], tab[i]);
-			}
-			document.getElementById("hist").innerHTML+=res+"="+ecran2.value+"</br>";
-			tab.splice(1, tab.length-1);
-		    t.splice(1, t.length-1);
-		}catch(e){
-			ecran2.value="Error : "+e;
-		}
-	}
-	// Au clique sur le Bouton effacer ecran inférieur
-	btn[12].onclick=function(){
-		ecran2.value="0";
-	};
-	// Au clique sur le Bouton effacer tous les écrans
-	btn[13].onclick=function(){
-		ecran2.value="0";
-		ecran.value="";
-	};
-	// Au clique sur le bouton effacer précédent
-	btn[14].onclick=function(){
-		var cop=ecran2.value;
-		ecran2.value=cop.substring(0, cop.length-1);
-	};
-	// Fonction mathématiques unaire
-	function fonctU(f){
-		var val= f+"("+ecran2.value+")";
-		var fo="Math."+val, temp=ecran.value; 
-		ecran.value+=val;
-		ecran2.value=eval(fo);
-		tab.push(val);
-		t.push(ecran2.value); 
-		x=2;	// Souvenez vous de ça (signifie qu'on a fait appel à une fonction mathématique unaire)
-		document.getElementById("hist").innerHTML+=val+"="+ecran2.value+"</br>";
-	}
-</script>
-
+<script type="text/javascript" src="maths.js"></script>
+<script type="text/javascript" src="programs.js"></script>
+<script type="text/javascript" src="physics.js"></script>
+  </div>
   </body>
 </html>
 
