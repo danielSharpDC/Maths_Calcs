@@ -36,6 +36,21 @@ function nbr(n){
 	}
  
 }
+function pi(){
+	ecran.value+="π";
+	ecran2.value=Math.PI;
+	tab.push("π");
+	t.push(ecran2.value);
+	x=2;
+}
+function fact(){
+	var v=ecran2.value+"!"
+	ecran.value+=v;
+	ecran2.value=factoriel(parseInt(ecran2.value));
+	tab.push(v);
+	t.push(ecran2.value);
+	x=2;
+}
 
  function sinus(){
 	fonctU("sin");
@@ -135,8 +150,8 @@ function brack(b){
 		ecran.value+=b+"";
 		ecran2.value="0";
 	}else{			
-		ecran.value+=ecran2.value+b+"";
-		ecran2.value="";
+		ecran.value+=ecran2.value+b;
+		ecran2.value=eval(ecran.value);
 	}
 }
 // Fonction effectuant les calculs arithmétiques avec en paramètre l'opérateur			
@@ -188,6 +203,8 @@ function equal(){
 			ecran.value="";
 			x=0;
 			c=0;
+			tab.splice(1, tab.length-1);
+	    	t.splice(1, t.length-1);
 			res="";
 			return 0;
 		}
@@ -199,9 +216,25 @@ function equal(){
 		}
 
 		if(compt>0){
-			for(var i=1; i <=tab.length-1; i++){
-				res=res.replace(tab[i], t[i]);
-			}
+			var splitted = res.split(/[\+\*\/]/), tempRes=res;
+		 	res="";
+		 	for(var j=0, k=splitted.length; j<k; j++){
+		 		var op="";
+			 	var pos=splitted[j].length;
+			 	//alert(splitted[j]);
+		 		//alert(pos);
+		 		if(splitted.length>1 && j<(splitted.length-1)){
+			 		op=tempRes.substring(pos, pos+1);
+			 		alert(op);
+			 	}
+		 		for(var i=0; i<tab.length; i++){
+			 		if(splitted[j]==tab[i]){
+			 			splitted[j]=t[i];
+			 		}
+			 	}
+			 	
+				res+=splitted[j]+op;
+		 	}
 			if(x<2){
 				 res+=ecran2.value+"";
 				 y=0;
@@ -212,10 +245,28 @@ function equal(){
 		}
 	}else{
 		res=ecran.value+"0";
-	    res=res.replace("×", "*");
-		res=res.replace("÷", "/");
-		for(var i=1; i<=tab.length-1; i++){
-			res=res.replace(tab[i], t[i]);
+		if(res.indexOf(tab[1])){
+		    res=res.replace("×", "*");
+			res=res.replace("÷", "/");
+			var splitted = res.split(/[\+\*\/]/), tempRes=res;
+		 	res="";
+
+		 	for(var j=0, k=splitted.length; j<k; j++){
+		 		var op="";
+			 	var pos=splitted[j].length;
+			 	//alert(splitted[j]);
+		 		//alert(pos);
+		 		if(splitted.length>1 && j<(splitted.length-1)){
+			 		op=tempRes.substring(pos, pos+1);
+			 		alert(op);
+			 	}
+		 		for(var i=0; i<tab.length; i++){
+			 		if(splitted[j]==tab[i]){
+			 			splitted[j]=t[i];
+			 		}
+			 	}
+				res+=splitted[j]+op;
+		 	}
 		}
 	}
 	try{
@@ -223,12 +274,26 @@ function equal(){
 		ecran.value="";
 		res=res.replace("*", "×");
 		res=res.replace("/", "÷");
-		 for(var i= tab.length-1; i>=1; i--){
-			res=res.replace(t[i], tab[i]);
-		}
+		var splitted = res.split(/[\+\*\/]/), tempRes=res;
+	 	res="";
+	 	for(var j=0, k=splitted.length; j<k; j++){
+	 		var op="";
+		 	if(splitted.length>1 && j<(splitted.length-1)){
+		 		var pos=splitted[j].length;
+		 		op=tempRes.substring(pos, pos+1);
+		 		alert(op);
+		 	}
+	 		for(var i=0; i<tab.length; i++){
+		 		if(splitted[j]==t[i]){
+		 			splitted[j]=tab[i];
+		 		}
+		 	}
+			res+=splitted[j]+op;
+	 	}
 		document.getElementById("hist").innerHTML+=res+"="+ecran2.value+"</br>";
 		tab.splice(1, tab.length-1);
 	    t.splice(1, t.length-1);
+	    x=y=c=0;
 	}catch(e){
 		ecran2.value="Error : "+e;
 	}
@@ -241,20 +306,35 @@ btn[12].onclick=function(){
 btn[13].onclick=function(){
 	ecran2.value="0";
 	ecran.value="";
+	x=y=c=0;
+	tab.splice(1, tab.length-1);
+	t.splice(1, t.length-1);
 };
 // Au clique sur le bouton effacer précédent
 btn[14].onclick=function(){
 	var cop=ecran2.value;
 	ecran2.value=cop.substring(0, cop.length-1);
 };
-// Fonction mathématiques unaire
+// Fonction mathématiques unaires
 function fonctU(f){
 	var val= f+"("+ecran2.value+")";
-	var fo="Math."+val, temp=ecran.value; 
-	ecran.value+=val;
+	var fo="Math."+val, temp=ecran.value;
+	if(x==2){ 
+		ecran.value=val;
+	}else{
+		ecran.value+=val;
+	}
 	ecran2.value=eval(fo);
 	tab.push(val);
 	t.push(ecran2.value); 
 	x=2;	// Souvenez vous de ça (signifie qu'on a fait appel à une fonction mathématique unaire)
 	document.getElementById("hist").innerHTML+=val+"="+ecran2.value+"</br>";
+}
+
+function factoriel(n){
+	if(n==1){
+		return n;
+	}else{
+		return n*factoriel(n-1);
+	}
 }

@@ -2,6 +2,7 @@
 	border: 1px solid rgba(42,16,140,1);
 	width: 500px;
 	height: 360px;
+	overflow: auto;
 }
 #title{
 	width: 99%;
